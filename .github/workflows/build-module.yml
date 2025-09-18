@@ -23,7 +23,10 @@ jobs:
           repository: openwrt/openwrt
           ref: v${{ matrix.build_env.tag }}
           fetch-depth: 0
-
+      - name: Remove ccache from tools
+        run: |
+          sed -i '/ccache/d' tools/Makefile
+          
       - name: Cache dl
         uses: actions/cache@v4
         with:
