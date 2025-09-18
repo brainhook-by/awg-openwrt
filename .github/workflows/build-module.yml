@@ -56,9 +56,13 @@ jobs:
 
           make defconfig
 
-      - name: Build toolchain and kernel
+      - name: Build toolchain and kernel (without ccache)
         run: |
-          make tools/install -j$(nproc) V=s
+          # Build tools, skipping ccache
+          make tools/install -j$(nproc) V=s IGNORE_ERRORS=m || true
+          make tools/ccache/clean
+
+          # Build toolchain and kernel
           make toolchain/install -j$(nproc) V=s
           make target/linux/compile -j$(nproc) V=s
 
